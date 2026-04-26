@@ -1,0 +1,60 @@
+name: CI Pipeline
+
+# Déclencheur : à chaque push sur la branche main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Les jobs à exécuter
+jobs:
+
+  # Job 1 : Vérification du code
+  lint:
+    name: Vérification des scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Récupérer le code
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # Étape 2 : Vérifier les scripts Bash
+      - name: Vérifier les scripts Bash
+        run: |
+          echo "Vérification des scripts Bash..."
+          for script in $(find . -name "*.sh"); do
+            bash -n "$script" && echo "✅ $script OK" || echo "❌ $script ERREUR"
+          done
+
+  # Job 2 : Build Docker
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      # Étape 1 : Récupérer le code
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # Étape 2 : Configurer Docker Buildx
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Étape 3 : Builder l'image Docker
+      - name: Build image Docker
+        run: |
+          cd exercice2
+          bash generate.sh
+          docker build -t devops-training:latest .
+          echo "✅ Image buildée avec succès !"
+
+      # Étape 4 : Vérifier l'image
+      - name: Vérifier l'image
+        run: |
+          docker images devops-training
+          echo "✅ Vérification terminée !"
