@@ -1,2 +1,6 @@
 backup/
 *.tar.gz
+.env
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
