@@ -60,3 +60,54 @@ jobs:
         run: |
           docker images devops-training
           echo "✅ Vérification terminée !"
+name: CI Pipeline
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  lint:
+    name: Vérification des scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4.2.2
+
+      - name: Vérifier les scripts Bash
+        run: |
+          echo "Vérification des scripts Bash..."
+          for script in $(find . -name "*.sh"); do
+            bash -n "$script" && echo "✅ $script OK" || echo "❌ $script ERREUR"
+          done
+
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3.10.0
+
+      - name: Build image Docker
+        run: |
+          cd exercice2
+          bash generate.sh
+          docker build -t devops-training:latest .
+          echo "✅ Image buildée avec succès !"
+
+      - name: Vérifier l'image
+        run: |
+          docker images devops-training
+          echo "✅ Vérification terminée !"
