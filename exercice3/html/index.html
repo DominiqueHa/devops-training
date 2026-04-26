@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ma Stack DevOps</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem;
+            margin: 0;
+        }
+        h1 { color: #58a6ff; }
+        .services {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .service {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            min-width: 150px;
+        }
+        .service h3 { color: #58a6ff; margin: 0.5rem 0; }
+        .dot {
+            width: 12px; height: 12px;
+            background: #3fb950;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐳 Ma Stack Docker Compose</h1>
+    <p>Trois services orchestrés ensemble</p>
+    <div class="services">
+        <div class="service">
+            <div>🌐</div>
+            <h3>Nginx</h3>
+            <span><span class="dot"></span>:7070</span>
+        </div>
+        <div class="service">
+            <div>🗄️</div>
+            <h3>PostgreSQL</h3>
+            <span><span class="dot"></span>:5432</span>
+        </div>
+        <div class="service">
+            <div>🖥️</div>
+            <h3>Adminer</h3>
+            <span><span class="dot"></span>:7071</span>
+        </div>
+    </div>
+</body>
+</html>

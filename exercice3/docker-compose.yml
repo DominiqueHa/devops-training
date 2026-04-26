@@ -1,0 +1,39 @@
+services:
+
+  # Service 1 : Serveur web Nginx
+  web:
+    image: nginx:alpine
+    container_name: ma-stack-exercice3
+    ports:
+      - "7070:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  # Service 2 : Base de données PostgreSQL
+  db:
+    image: postgres:alpine
+    container_name: exercice3-db 
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Service 3 : Interface web pour gérer la DB
+  adminer:
+    image: adminer
+    container_name: ma-stack-adminer3
+    ports:
+      - "7071:8080"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+# Volume persistant pour PostgreSQL
+volumes:
+  postgres-data:
